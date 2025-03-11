@@ -1,16 +1,29 @@
-INSTALLED_DJANGO_APPS = [
+from team_tracker import env
+import os
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(env.BASE_DIR, 'media')
+
+DJANGO_DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
 
+LOCAL_APPS = [
+    'apps.user',
+]
+
+THIRD_PARTY_APPS = [
+    'drf_spectacular',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    'apps.user',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
