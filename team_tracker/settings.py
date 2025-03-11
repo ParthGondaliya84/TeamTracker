@@ -21,13 +21,17 @@ DEBUG = env.DEBUG
 ALLOWED_HOSTS = env.ALLOWED_HOSTS
 
 # settings come from config import django_app
-INSTALLED_APPS = django_app.INSTALLED_DJANGO_APPS
+INSTALLED_APPS = django_app.DJANGO_DEFAULT_APPS + django_app.LOCAL_APPS + django_app.THIRD_PARTY_APPS
 MIDDLEWARE = django_app.MIDDLEWARE
 AUTH_PASSWORD_VALIDATORS = django_app.AUTH_PASSWORD_VALIDATORS
 TEMPLATES = django_app.TEMPLATES
+MEDIA_URL = django_app.MEDIA_URL
+MEDIA_ROOT = django_app.MEDIA_ROOT
 
 # settings come from config import drf
 REST_FRAMEWORK = drf.REST_FRAMEWORK
+
+SPECTACULAR_SETTINGS = spectacular.SPECTACULAR_SETTINGS
 
 ROOT_URLCONF = 'team_tracker.urls'
 
@@ -69,3 +73,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'user.CustomUser'
