@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from apps.user.managers import CustomUserManager
 from django.conf import settings
+from apps.user.choices import GENDER_CHOICE
 
 
 class BaseModel(models.Model):
@@ -60,3 +61,19 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class UserProfileGeneralInfo(BaseModel):
+
+    user = models.OneToOneField(CustomUser , on_delete=models.CASCADE ,related_name="profile")
+    user_profile = models.ImageField(upload_to="userprofile/" , blank=True, null=True)
+    alternative_email = models.EmailField(blank=True , null=True)
+    phone = models.CharField(blank=True , null=True)
+    alternative_phone = models.EmailField(blank=True , null=True)
+    dob = models.DateField(blank=True , null=True)
+    skype = models.URLField(max_length=200 , blank=True , null=True)
+    ssn = models.BigIntegerField(blank=True , null=True)
+    gender = models.CharField(max_length=10 , choices=GENDER_CHOICE , blank=True , null=True)
+
+    def __str__(self):
+        return self.user.first_name

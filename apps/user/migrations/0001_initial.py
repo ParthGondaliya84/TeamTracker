@@ -38,4 +38,28 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
         ),
+        migrations.CreateModel(
+            name='UserProfileGeneralInfo',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('is_active', models.BooleanField(default=True)),
+                ('is_delete', models.BooleanField(default=False)),
+                ('user_profile', models.ImageField(blank=True, null=True, upload_to='userprofile/')),
+                ('alternative_email', models.EmailField(blank=True, max_length=254, null=True)),
+                ('phone', models.CharField(blank=True, null=True)),
+                ('alternative_phone', models.EmailField(blank=True, max_length=254, null=True)),
+                ('dob', models.DateField(blank=True, null=True)),
+                ('skype', models.URLField(blank=True, null=True)),
+                ('ssn', models.BigIntegerField(blank=True, null=True)),
+                ('gender', models.CharField(blank=True, choices=[('male', 'Male'), ('female', 'Female'), ('other', 'Other')], max_length=10, null=True)),
+                ('created_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='created_%(class)s_set', to=settings.AUTH_USER_MODEL)),
+                ('updated_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='updated_%(class)s_set', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='profile', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'abstract': False,
+            },
+        ),
     ]

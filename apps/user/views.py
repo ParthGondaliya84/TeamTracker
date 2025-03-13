@@ -3,10 +3,15 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from apps.user.serializers import (
     CustomUserRegisterSerializer,
-    UserLoginSerializer
+    UserLoginSerializer,
+    ProfileGeneralInfoSerializer,
+    CustomUserSerializer
 )
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
+from apps.user.models import (
+    UserProfileGeneralInfo,
+    CustomUser
+)
+from rest_framework import viewsets, mixins, pagination
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
@@ -15,7 +20,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class CustomUserRegisterAPIView(CreateModelMixin, GenericViewSet):
+class CustomUserRegisterAPIView(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserRegisterSerializer
     permission_classes = [AllowAny]
@@ -34,7 +39,7 @@ class CustomUserRegisterAPIView(CreateModelMixin, GenericViewSet):
             )
 
 
-class UserLoginViewSet(CreateModelMixin, GenericViewSet):
+class UserLoginViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = UserLoginSerializer
 
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
@@ -94,3 +99,16 @@ class UserLoginViewSet(CreateModelMixin, GenericViewSet):
             return Response(
                 {"error": "Invalid token" }, status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class CustomUserView(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    pagination_class = pagination.PageNumberPagination
+
+    
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user , updated_by=self.request.user)
+        
+    def perform_update(self, serializer):
+        serializer.save(updated_by=self.request.user)
