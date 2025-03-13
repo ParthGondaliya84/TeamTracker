@@ -35,43 +35,43 @@ class UserLoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
 
-class ProfileGeneralInfoSerializer(serializers.ModelSerializer):
-    user =serializers.StringRelatedField()
-    created_by = serializers.StringRelatedField()
-    updated_by = serializers.StringRelatedField()
+class CustomUserSerializer(serializers.ModelSerializer):
+     
+     class Meta:
+         model = CustomUser   
+         fields = ["first_name", "last_name"] 
+         
+
+class BaseSerialzers(serializers.ModelSerializer):
+    user =serializers.StringRelatedField(read_only=True)
+    created_by = serializers.StringRelatedField(read_only=True)
+    updated_by = serializers.StringRelatedField(read_only=True)
     
     class Meta:
+        abstract = True
+        read_only_fields = ["created_by", "updated_by", "created_at", "updated_at",
+                            "is_active", "is_delete"]
+
+
+class ProfileGeneralInfoSerializer(BaseSerialzers):
+     user  = CustomUserSerializer()
+     
+     class Meta:
         model = UserProfileGeneralInfo
         fields = '__all__'
-        extra_kwargs = {'user': {'read_only': True}} 
-
-
-class CustomUserSerializer(serializers.ModelSerializer):
-    created_by = serializers.ReadOnlyField()
-    updated_by = serializers.ReadOnlyField()
-    profile = ProfileGeneralInfoSerializer(required=False)
-
-    class Meta:
-        model = CustomUser
-        fields = ["id", "email", "first_name", "last_name", "profile",
-                  "created_by", "updated_by"]
-        read_only_fields = ["created_by", "updated_by"]
-
-
-    def update(self, instance, validated_data):
-        validated_data.pop('email', None) 
-
-        profile_data = validated_data.pop('profile', None)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.save()
-
-        if profile_data:
-            try:
-                profile_serializer = ProfileGeneralInfoSerializer(instance.profile, data=profile_data, partial=True)
-                if profile_serializer.is_valid():
-                    profile_serializer.save(updated_by=self.context['request'].user)
-            except UserProfileGeneralInfo.DoesNotExist:
-                pass
-
-        return super().update(instance, validated_data)
+        extra_kwargs = {'user': {'read_only': True}}
+         
+         
+     def update(self, instance, validated_data):
+         user_data = validated_data.pop("user" , None)
+         
+         if user_data:
+             user_serialziers = CustomUserSerializer(instance.user, data=user_data, partial=True)
+             
+             if user_serialziers.is_valid():
+                 user_serialziers.save()
+             else:
+                 raise serializers.ValidationError(user_serialziers.errors)
+         
+         return super().update(instance, validated_data)
+     

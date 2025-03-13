@@ -3,3 +3,10 @@ GENDER_CHOICE=(
     ('female', 'Female'),
     ('other', 'Other'),
 )
+
+USERROLE=(
+    ('HR', 'Human Resource'),
+    ('LEADER', 'Leader'),
+    ('EMPLOYEE', 'Employee'),
+    ('MANAGER', 'Manager'),
+)

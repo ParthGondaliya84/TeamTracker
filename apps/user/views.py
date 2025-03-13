@@ -101,14 +101,20 @@ class UserLoginViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             )
 
 
-class CustomUserView(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-    pagination_class = pagination.PageNumberPagination
+class BaseViewSet(viewsets.ModelViewSet):
 
+    http_method_names = ["get", "put", "patch"]
     
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user , updated_by=self.request.user)
         
     def perform_update(self, serializer):
-        serializer.save(updated_by=self.request.user)
+        serializer.save( updated_by=self.request.user)
+
+
+class ProfileGeneralInfoView(BaseViewSet):
+    queryset= UserProfileGeneralInfo.objects.all()
+    serializer_class = ProfileGeneralInfoSerializer
+     
+    def get_queryset(self):
+        return UserProfileGeneralInfo.objects.filter(user=self.request.user)
