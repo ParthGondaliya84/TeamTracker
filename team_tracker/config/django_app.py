@@ -1,8 +1,4 @@
-from team_tracker import env
-import os
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(env.BASE_DIR, 'media')
+from team_tracker.env import BASE_DIR
 
 DJANGO_DEFAULT_APPS = [
     'django.contrib.admin',
@@ -38,7 +34,7 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [BASE_DIR /'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

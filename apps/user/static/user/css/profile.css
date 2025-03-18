@@ -1,0 +1,12 @@
+body {
+    background-color: #e3f2fd;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 600px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from team_tracker.config import (django_app, drf, spectacular)
 from team_tracker import env
+import os
 
 # settings come from team_tracker import env
 BASE_DIR = env.BASE_DIR
@@ -25,8 +26,7 @@ INSTALLED_APPS = django_app.DJANGO_DEFAULT_APPS + django_app.LOCAL_APPS + django
 MIDDLEWARE = django_app.MIDDLEWARE
 AUTH_PASSWORD_VALIDATORS = django_app.AUTH_PASSWORD_VALIDATORS
 TEMPLATES = django_app.TEMPLATES
-MEDIA_URL = django_app.MEDIA_URL
-MEDIA_ROOT = django_app.MEDIA_ROOT
+
 
 # settings come from config import drf
 REST_FRAMEWORK = drf.REST_FRAMEWORK
@@ -67,7 +67,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(env.BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -75,3 +81,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.CustomUser'
+
+LOGIN_URL = '/user/login/'
+
+LOGIN_REDIRECT_URL = '/user/profile/'
