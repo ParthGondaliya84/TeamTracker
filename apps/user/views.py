@@ -17,6 +17,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework import status
+from apps.base.views import BaseViewSet
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -102,39 +103,6 @@ User = get_user_model()
 #             )
 
 
-class BaseViewSet(viewsets.ModelViewSet):
-
-    http_method_names = ["get", "put", "patch"]
-    
-    def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user , updated_by=self.request.user)
-        
-    def perform_update(self, serializer):
-        serializer.save( updated_by=self.request.user)
-
-
-class ProfileGeneralInfoView(BaseViewSet):
-    serializer_class = ProfileGeneralInfoSerializer
-     
-    def get_queryset(self):
-        return UserProfileGeneralInfo.objects.filter(user=self.request.user)
-
-
-from django.shortcuts import render
-
-def login_view(request):
-    return render(request, 'user/login.html')
-
-
-def profile_view(request):
-    return render(request, 'user/profile.html')
-
-
-
-
-
-
-
 class AuthView(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = UserRegistrationSerializer
     
@@ -215,3 +183,20 @@ class AuthView(mixins.CreateModelMixin, viewsets.GenericViewSet):
             return Response(
                 {"error": "Invalid token" }, status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class ProfileGeneralInfoView(BaseViewSet):
+    serializer_class = ProfileGeneralInfoSerializer
+     
+    def get_queryset(self):
+        return UserProfileGeneralInfo.objects.filter(user=self.request.user)
+
+
+from django.shortcuts import render
+
+def login_view(request):
+    return render(request, 'user/login.html')
+
+
+def profile_view(request):
+    return render(request, 'user/profile.html')

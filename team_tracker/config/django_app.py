@@ -11,6 +11,7 @@ DJANGO_DEFAULT_APPS = [
 
 LOCAL_APPS = [
     'apps.user',
+    'apps.base',
 ]
 
 THIRD_PARTY_APPS = [

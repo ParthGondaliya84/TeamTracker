@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from apps.user.models import CustomUser, UserProfileGeneralInfo
+from apps.base.serializers import BaseSerialzers
 
 # class CustomUserRegisterSerializer(serializers.ModelSerializer):
 #     password = serializers.CharField(write_only=True)
@@ -41,17 +42,6 @@ from apps.user.models import CustomUser, UserProfileGeneralInfo
 #          model = CustomUser   
 #          fields = ["first_name", "last_name"] 
          
-
-class BaseSerialzers(serializers.ModelSerializer):
-    user =serializers.StringRelatedField(read_only=True)
-    created_by = serializers.StringRelatedField(read_only=True)
-    updated_by = serializers.StringRelatedField(read_only=True)
-    
-    class Meta:
-        abstract = True
-        read_only_fields = ["created_by", "updated_by", "created_at", "updated_at",
-                            "is_active", "is_delete"]
-
 
 # class ProfileGeneralInfoSerializer(BaseSerialzers):
 #      user  = CustomUserSerializer()
