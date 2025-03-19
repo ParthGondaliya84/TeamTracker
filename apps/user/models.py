@@ -37,6 +37,8 @@ class CustomUser(AbstractUser):
     
     email = models.EmailField(unique=True)
     user_role =models.CharField(max_length=20, choices=PMSUSER_ROLE)
+    gender = models.CharField(max_length=10 , choices=GENDER_CHOICE)
+    
     created_by= models.ForeignKey(
         'self',
         on_delete=models.SET_NULL,
@@ -62,6 +64,12 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+    
+    class Meta:
+        db_table = "pms_user"
+        verbose_name = "PMS User"
+        verbose_name_plural = "PMS Users"
+
 
 
 class UserProfileGeneralInfo(BaseModel):
@@ -78,7 +86,10 @@ class UserProfileGeneralInfo(BaseModel):
     gender = models.CharField(max_length=10 , choices=GENDER_CHOICE , blank=True , null=True)
 
     def __str__(self):
-        return self.user.first_name
+        return self.user.email
     
     class Meta:
+        db_table = "profile_general_info"
+        verbose_name = "General Profile"
+        verbose_name_plural = "General Profiles"
         ordering = ['-created_at']

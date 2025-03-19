@@ -9,10 +9,12 @@ async function submitProfile() {
     };
 
     try {
-        let token = localStorage.getItem('token');
+        // Retrieve the token using the same key as in login.js ("accessToken")
+        let token = localStorage.getItem('accessToken');
         if (!token) {
-            await refreshToken();  // Attempt to refresh if token is missing
-            token = localStorage.getItem('token');
+            // If token is missing, inform the user. Optionally, you could implement token refresh logic here.
+            alert("Access token not found. Please log in again.");
+            return;
         }
 
         const response = await fetch('/user/userprofile/', {
