@@ -1,32 +1,27 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from django.contrib.auth.models import AbstractUser     
 from apps.user.managers import CustomUserManager
 from apps.user.choices import GENDER_CHOICE, USERROLE
 from apps.base.models import BaseModel
 
 
-class CustomUser(AbstractUser):
+class TeamUser(AbstractUser):
     PMSUSER_ROLE=(
         ('EMPLOYEE', 'Employee'),
         ('HR', 'Human resources'),
     )
     
-    email = models.EmailField(unique=True)
-    user_role =models.CharField(max_length=20, choices=PMSUSER_ROLE)
+    email = models.EmailField(unique=True, verbose_name='Your Email')
+    user_role =models.CharField(
+        max_length=20, choices=PMSUSER_ROLE, verbose_name='Role in Company')
     gender = models.CharField(max_length=10 , choices=GENDER_CHOICE)
     
     created_by= models.ForeignKey(
-        'self',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+        'self', on_delete=models.SET_NULL, null=True, blank=True, 
         related_name="created_users"
         )
     updated_by= models.ForeignKey(
-        'self',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+        'self', on_delete=models.SET_NULL, null=True, blank=True,
         related_name="updated_user"
         )
     is_active = models.BooleanField(default=True)
@@ -42,16 +37,20 @@ class CustomUser(AbstractUser):
         return self.email
     
     class Meta:
-        db_table = "pms_user"
-        verbose_name = "PMS User"
-        verbose_name_plural = "PMS Users"
+        db_table = "teamtracker_user"
+        verbose_name = "TeamTracker User"
+        verbose_name_plural = "TamTracker Users"
 
 
 
-class UserProfileGeneralInfo(BaseModel):
+class UserProfileInfo(BaseModel):
     
-    user = models.OneToOneField(CustomUser , on_delete=models.CASCADE ,related_name="profile")
-    user_profile = models.ImageField(upload_to="media/userprofile" , blank=True, null=True)
+    user = models.OneToOneField(
+        TeamUser ,on_delete=models.CASCADE, related_name="profile"
+        )
+    user_profile = models.ImageField(
+        upload_to="media/userprofile",blank=True, null=True
+        )
     email_address = models.EmailField(blank=True , null=True)
     alternative_address = models.EmailField(blank=True , null=True)
     phone = models.CharField(blank=True , null=True)
@@ -59,7 +58,9 @@ class UserProfileGeneralInfo(BaseModel):
     dob = models.DateField(blank=True , null=True)
     skype = models.URLField(max_length=200 , blank=True , null=True)
     ssn = models.BigIntegerField(blank=True , null=True)
-    gender = models.CharField(max_length=10 , choices=GENDER_CHOICE , blank=True , null=True)
+    gender = models.CharField(
+        max_length=10, choices=GENDER_CHOICE, blank=True, null=True
+        )
 
     def __str__(self):
         return self.user.email

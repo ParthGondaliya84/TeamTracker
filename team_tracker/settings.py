@@ -80,7 +80,7 @@ MEDIA_ROOT = os.path.join(env.BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'user.CustomUser'
+AUTH_USER_MODEL = 'user.TeamUser'
 
 LOGIN_URL = '/user/login/'
 

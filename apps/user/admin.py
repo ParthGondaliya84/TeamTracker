@@ -1,13 +1,14 @@
 from django.contrib import admin
-from apps.user.models import CustomUser, UserProfileGeneralInfo
+from apps.user.models import TeamUser, UserProfileInfo
 
-class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ['email', 'first_name', 'last_name', 'is_active', 'created_at']
+class TeamUserAdmin(admin.ModelAdmin):
+    list_display = ['email', 'first_name', 'last_name']
+    filter_horizontal = ['user_permissions']
     
 
-class UserProfileGeneralInfoAdmin(admin.ModelAdmin):
+class UserProfileInfoAdmin(admin.ModelAdmin):
     list_display = ["user", "email_address", "phone", "dob", "gender", "created_at"]
 
     
-admin.site.register(CustomUser)
-admin.site.register(UserProfileGeneralInfo, UserProfileGeneralInfoAdmin)
+admin.site.register(TeamUser, TeamUserAdmin)
+admin.site.register(UserProfileInfo, UserProfileInfoAdmin)

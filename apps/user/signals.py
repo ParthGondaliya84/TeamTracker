@@ -1,8 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from apps.user.models import CustomUser, UserProfileGeneralInfo
+from apps.user.models import TeamUser, UserProfileInfo
 
-@receiver(post_save, sender=CustomUser)
+@receiver(post_save, sender=TeamUser)
 def create_user_profile(sender, instance, created , **kwargs):
     if created:
-        UserProfileGeneralInfo.objects.create(user=instance)
+        UserProfileInfo.objects.create(user=instance)
