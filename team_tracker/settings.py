@@ -22,7 +22,10 @@ DEBUG = env.DEBUG
 ALLOWED_HOSTS = env.ALLOWED_HOSTS
 
 # settings come from config import django_app
-INSTALLED_APPS = django_app.DJANGO_DEFAULT_APPS + django_app.LOCAL_APPS + django_app.THIRD_PARTY_APPS
+INSTALLED_APPS = (
+    django_app.DJANGO_DEFAULT_APPS + django_app.BACKEND_LOCAL_APPS +
+    django_app.FRONTEND_LOCAL_APPS + django_app.THIRD_PARTY_APPS
+)
 MIDDLEWARE = django_app.MIDDLEWARE
 AUTH_PASSWORD_VALIDATORS = django_app.AUTH_PASSWORD_VALIDATORS
 TEMPLATES = django_app.TEMPLATES
@@ -82,6 +85,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.TeamUser'
 
-LOGIN_URL = '/user/login/'
+LOGIN_URL = '/team-user/login/'
 
-LOGIN_REDIRECT_URL = '/user/profile/'
+LOGIN_REDIRECT_URL = '/team-user/profile/'
