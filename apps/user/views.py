@@ -2,22 +2,22 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from apps.user.serializers import (
-    CustomUserRegisterSerializer,
-    UserLoginSerializer
+    UserRegistrationSerializer, UserLoginSerializer, UserProfileInfoSerializer
 )
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
+from apps.user.models import (
+    UserProfileInfo, TeamUser
+)
+from rest_framework import viewsets, mixins, pagination
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework import status
-from django.contrib.auth import get_user_model
+from apps.base.views import BaseViewSet
 
-User = get_user_model()
 
-class CustomUserRegisterAPIView(CreateModelMixin, GenericViewSet):
-    queryset = User.objects.all()
-    serializer_class = CustomUserRegisterSerializer
+class CustomUserRegisterAPIView(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    queryset = TeamUser.objects.all()
+    serializer_class = UserRegistrationSerializer
     permission_classes = [AllowAny]
     
     def create(self, request, *args, **kwargs):
@@ -34,7 +34,7 @@ class CustomUserRegisterAPIView(CreateModelMixin, GenericViewSet):
             )
 
 
-class UserLoginViewSet(CreateModelMixin, GenericViewSet):
+class UserLoginViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = UserLoginSerializer
 
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
@@ -79,18 +79,43 @@ class UserLoginViewSet(CreateModelMixin, GenericViewSet):
             refresh_token = request.data.get("refresh")
             if not refresh_token:
                 return Response(
-                    {"error": "Refresh token is required"}, status=status.HTTP_400_BAD_REQUEST
+                    {"error": "Refresh token is required"},
+                    status=status.HTTP_400_BAD_REQUEST
                 )
                 
             if not request.auth:
-                return Response({"error": "Invalid Token in Header"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"error": "Invalid Token in Header"},
+                    status=status.HTTP_400_BAD_REQUEST
+                    )
         
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response(
-                {"message": "Logged out successfully"}, status=status.HTTP_200_OK
+                {"message": "Logged out successfully"},
+                status=status.HTTP_200_OK
             )
         except Exception :
             return Response(
-                {"error": "Invalid token" }, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Invalid token" },
+                status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class ProfileGeneralInfoView(BaseViewSet):
+    serializer_class = UserProfileInfoSerializer
+     
+    def get_queryset(self):
+        return UserProfileInfo.objects.filter(user=self.request.user)
+
+
+
+# Frontend Views
+from django.shortcuts import render
+
+def login_view(request):
+    return render(request, 'user/login.html')
+
+
+def profile_view(request):
+    return render(request, 'user/profile.html')
