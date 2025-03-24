@@ -17,10 +17,3 @@ user_router.register(
 urlpatterns = [
     path('', include(user_router.urls)),
 ]
-from apps.user.views import (
-    profile_view, login_view
-)
-urlpatterns += [
-    path('profile/',profile_view, name='profile'),
-    path('login/', login_view, name='login'),
-]

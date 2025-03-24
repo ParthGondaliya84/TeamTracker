@@ -34,7 +34,7 @@ class CustomUserRegisterAPIView(mixins.CreateModelMixin, viewsets.GenericViewSet
             )
 
 
-class UserLoginViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class UserLoginViewSet(viewsets.GenericViewSet):
     serializer_class = UserLoginSerializer
 
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
@@ -104,18 +104,7 @@ class UserLoginViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
 class ProfileGeneralInfoView(BaseViewSet):
     serializer_class = UserProfileInfoSerializer
+    http_method_names = ["get", "put", "patch"]
      
     def get_queryset(self):
         return UserProfileInfo.objects.filter(user=self.request.user)
-
-
-
-# Frontend Views
-from django.shortcuts import render
-
-def login_view(request):
-    return render(request, 'user/login.html')
-
-
-def profile_view(request):
-    return render(request, 'user/profile.html')
