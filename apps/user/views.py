@@ -2,20 +2,22 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from apps.user.serializers import (
-    UserRegistrationSerializer, UserLoginSerializer, UserProfileInfoSerializer
+    UserRegistrationSerializer,
+    UserLoginSerializer,
+    UserProfileInfoSerializer
 )
 from apps.user.models import (
-    UserProfileInfo, TeamUser
+    UserProfileInfo,
+    TeamUser
 )
-from rest_framework import viewsets, mixins, pagination
-from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import viewsets, mixins
+from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from rest_framework import status
 from apps.base.views import BaseViewSet
 
 
-class CustomUserRegisterAPIView(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class CustomUserRegisterAPIView(mixins.CreateModelMixin, BaseViewSet):
     queryset = TeamUser.objects.all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [AllowAny]
@@ -34,7 +36,7 @@ class CustomUserRegisterAPIView(mixins.CreateModelMixin, viewsets.GenericViewSet
             )
 
 
-class UserLoginViewSet(viewsets.GenericViewSet):
+class UserLoginViewSet(BaseViewSet):
     serializer_class = UserLoginSerializer
 
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
@@ -102,7 +104,7 @@ class UserLoginViewSet(viewsets.GenericViewSet):
             )
 
 
-class ProfileGeneralInfoView(BaseViewSet):
+class ProfileGeneralInfoView(viewsets.ModelViewSet, BaseViewSet):
     serializer_class = UserProfileInfoSerializer
     http_method_names = ["get", "put", "patch"]
      

@@ -5,22 +5,27 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     const password = document.getElementById("password").value;
     const errorMessage = document.getElementById("error-message");
 
-    const response = await fetch('/user/auth/login/', {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-    });
+    try {
+        const response = await fetch('/user/auth/login/', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    if (response.ok) {
-        alert("Login successful!");
-        localStorage.setItem("accessToken", data.access);
-        window.location.href = "/team-user/profile/";  // Redirect to profile page
-    } 
-    else {
-        errorMessage.textContent = data.error || "Login failed. Please try again.";
+        if (response.ok) {
+            alert("Login successful!");
+            localStorage.setItem("accessToken", data.access);
+            localStorage.setItem("refreshToken", data.refresh);
+            window.location.href = "/team-user/profile/";  // Redirect to profile page
+        } else {
+            errorMessage.textContent = data.error || "Login failed. Please try again.";
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        errorMessage.textContent = "An unexpected error occurred.";
     }
 });
