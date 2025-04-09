@@ -2,20 +2,26 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from apps.user.serializers import (
-    UserRegistrationSerializer, UserLoginSerializer, UserProfileInfoSerializer
+    UserRegistrationSerializer,
+    UserLoginSerializer,
+    UserProfileInfoSerializer,
 )
 from apps.user.models import (
     UserProfileInfo, TeamUser
 )
-from rest_framework import viewsets, mixins, pagination
-from rest_framework.generics import CreateAPIView
+from rest_framework import viewsets, mixins
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework import status
 from apps.base.views import BaseViewSet
+from drf_spectacular.utils import extend_schema
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required, permission_required
 
 
-class CustomUserRegisterAPIView(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class CustomUserRegisterAPIView(
+    mixins.CreateModelMixin,
+    viewsets.GenericViewSet):
     queryset = TeamUser.objects.all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [AllowAny]
@@ -73,7 +79,7 @@ class UserLoginViewSet(viewsets.GenericViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
    
-    @action(detail=False, methods=["post"], permission_classes=[AllowAny])
+    @action(detail=False, methods=["post"], permission_classes=[IsAuthenticated])
     def logout(self, request, *args, **kwargs):
         try:
             refresh_token = request.data.get("refresh")
@@ -101,10 +107,16 @@ class UserLoginViewSet(viewsets.GenericViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-
-class ProfileGeneralInfoView(BaseViewSet):
+@extend_schema(
+    methods=['GET', 'PUT', 'PATCH'],
+    parameters=[
+        {'name': 'id', 'in': 'path', 'required': True, 'schema': {'type': 'integer'}}
+    ]
+)
+class ProfileGeneralInfoView(BaseViewSet, viewsets.ModelViewSet):
     serializer_class = UserProfileInfoSerializer
     http_method_names = ["get", "put", "patch"]
      
+    # @method_decorator(login_required)
     def get_queryset(self):
         return UserProfileInfo.objects.filter(user=self.request.user)

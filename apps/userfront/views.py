@@ -6,3 +6,7 @@ def login_view(request):
 
 def profile_view(request):
     return render(request, 'user/profile.html')
+
+
+def dashboard(request):
+    return render(request, 'dashboard/dashboard.html')
