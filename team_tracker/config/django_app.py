@@ -9,9 +9,13 @@ DJANGO_DEFAULT_APPS = [
     'django.contrib.staticfiles',
 ]
 
-LOCAL_APPS = [
+BACKEND_LOCAL_APPS = [
     'apps.user',
     'apps.base',
+]
+
+FRONTEND_LOCAL_APPS = [
+    'apps.userfront',
 ]
 
 THIRD_PARTY_APPS = [

@@ -2,9 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 
 # Create your views here.
-class BaseViewSet(viewsets.ModelViewSet):
-
-    http_method_names = ["get", "put", "patch"]
+class BaseViewSet(viewsets.GenericViewSet):
     
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user , updated_by=self.request.user)
