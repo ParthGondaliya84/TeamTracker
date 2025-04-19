@@ -18,7 +18,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     if (response.ok) {
         alert("Login successful!");
         localStorage.setItem("accessToken", data.access);
-        window.location.href = "/team-user/profile/";  // Redirect to profile page
+        window.location.href = "/team-user/dashboard/";
     } 
     else {
         errorMessage.textContent = data.error || "Login failed. Please try again.";

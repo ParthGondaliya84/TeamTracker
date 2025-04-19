@@ -116,7 +116,6 @@ class UserLoginViewSet(viewsets.GenericViewSet):
 class ProfileGeneralInfoView(BaseViewSet, viewsets.ModelViewSet):
     serializer_class = UserProfileInfoSerializer
     http_method_names = ["get", "put", "patch"]
-     
-    # @method_decorator(login_required)
+
     def get_queryset(self):
         return UserProfileInfo.objects.filter(user=self.request.user)

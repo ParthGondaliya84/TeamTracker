@@ -87,4 +87,4 @@ AUTH_USER_MODEL = 'user.TeamUser'
 
 LOGIN_URL = '/team-user/login/'
 
-LOGIN_REDIRECT_URL = '/team-user/profile/'
+LOGIN_REDIRECT_URL = '/team-user/dashboard/'

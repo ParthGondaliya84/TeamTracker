@@ -1,5 +1,5 @@
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'TeamTrcker: Employee Dashboard',
+    'TITLE': 'TeamTracker: Employee Dashboard',
     'DESCRIPTION': 'API for testing purposes in TeamTracker-backend.',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
