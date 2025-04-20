@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include('apps.user.urls')),
     path('team-user/', include('apps.userfront.urls')),
+    path('task/', include('apps.tasks.urls')),
 ]
 
 

@@ -12,6 +12,7 @@ DJANGO_DEFAULT_APPS = [
 BACKEND_LOCAL_APPS = [
     'apps.user',
     'apps.base',
+    'apps.tasks',
 ]
 
 FRONTEND_LOCAL_APPS = [
