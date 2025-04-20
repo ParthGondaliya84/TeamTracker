@@ -1,4 +1,6 @@
-INSTALLED_DJANGO_APPS = [
+from team_tracker.env import BASE_DIR
+
+DJANGO_DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -6,6 +8,23 @@ INSTALLED_DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+BACKEND_LOCAL_APPS = [
+    'apps.user',
+    'apps.base',
+]
+
+FRONTEND_LOCAL_APPS = [
+    'apps.userfront',
+]
+
+THIRD_PARTY_APPS = [
+    'drf_spectacular',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -20,7 +39,7 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [BASE_DIR /'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
