@@ -1,20 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser     
 from apps.user.managers import CustomUserManager
-from apps.user.choices import GENDER_CHOICE, USERROLE
+from apps.user.choices import GenderChoice, UserRole
 from apps.base.models import BaseModel
 
 
 class TeamUser(AbstractUser):
-    PMSUSER_ROLE=(
-        ('EMPLOYEE', 'Employee'),
-        ('HR', 'Human resources'),
-    )
     
     email = models.EmailField(unique=True, verbose_name='Your Email')
     user_role =models.CharField(
-        max_length=20, choices=PMSUSER_ROLE, verbose_name='Role in Company')
-    gender = models.CharField(max_length=10 , choices=GENDER_CHOICE)
+        choices=UserRole.choices(), verbose_name='Role in Company'
+        )
+    gender = models.CharField(choices=GenderChoice.choices())
     
     created_by= models.ForeignKey(
         'self', on_delete=models.SET_NULL, null=True, blank=True, 
@@ -59,7 +56,7 @@ class UserProfileInfo(BaseModel):
     skype = models.URLField(max_length=200 , blank=True , null=True)
     ssn = models.BigIntegerField(blank=True , null=True)
     gender = models.CharField(
-        max_length=10, choices=GENDER_CHOICE, blank=True, null=True
+        max_length=10, choices=GenderChoice.choices(), blank=True, null=True
         )
 
     def __str__(self):
